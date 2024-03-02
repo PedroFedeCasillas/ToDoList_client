@@ -1,34 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Routes, Route, useLocation } from "react-router-dom"
+//import RegisterPage from './pages/Register/RegisterPage'
+//import LoginPage from './pages/Login/LoginPage'
+import { Home } from './pages/Home/Home'
+import { TaskPage } from "./pages/TaskPage/TaskPage"
+import { TaskFormPage } from "./pages/TaskForm/TaskFormPage"
+import { ProfilePage } from "./pages/Profile/ProfilePage"
+import { ProtectedRoutes } from './ProtectedRoutes'
+import { ShowTask } from './components/ShowTask/ShowTask'
+import StopWatch from './components/StopWatch/StopWatch'
+import { Favorite } from './pages/Favorite/Favorite'
+import { Navbar } from './components/Navbar/Navbar'
+import { PageError } from './pages/PageError/PageError'
+import { Help } from './pages/Help/Help'
+import Test from "./pages/session/Test"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const Location = useLocation()
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container">
+      { Location.pathname !== "/register" && Location.pathname !== "/login" && Location.pathname !== "/error-page" && Location.pathname !== "/auth" ?  
+        <div className="nav">
+          <Navbar />
+        </div>
+        : ''
+      }
+      <div className="task">
+        <Routes>
+          {/* rutas publicas */}
+          <Route path='/' element={<Home className="home"/>} />
+          {/* <Route path='/register' element={<RegisterPage />} />
+          <Route path='/login' element={<LoginPage />} /> */}
+          <Route path='/auth' element={<Test />} />
+
+          {/* rutas privadas */}
+          <Route element={<ProtectedRoutes />}>
+            <Route path='/tasks' element={<TaskPage />} />
+            <Route path='/add-task' element={<TaskFormPage />} />
+            <Route path='/task/:id' element={<TaskFormPage />} />
+            <Route path='/Show-task/:id' element={<ShowTask />} />
+            <Route path='/profile' element={<ProfilePage />} />
+            <Route path='/stop-watch' element={<StopWatch />} />
+            <Route path='/favorite' element={<Favorite />} />
+            <Route path='/help' element={<Help />} />
+            <Route path='/error-page' element={<PageError />} />
+          </Route>
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+    </div>
   )
 }
 
